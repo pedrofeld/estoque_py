@@ -1,4 +1,4 @@
-# Produtos mockados para nao precisar criar BD e sistema de cadastro
+# Produtos mockados para nao precisar criar BD e sistema de cadastro (nao era exigencia da historia de usuario)
 produtos = [
     {"idProduto": 1, "nomeProduto": "Barra de chocolate", "qtdProdutoEstoque": 100},
     {"idProduto": 2, "nomeProduto": "Farinha", "qtdProdutoEstoque": 50},
@@ -25,7 +25,6 @@ def buscarProduto(nomeOuIdProduto):
 
 
 # Adicionar produtos ao estoque
-# Adicionar produtos ao estoque
 def entradaDeProduto(nomeOuIdProduto, quantidade, data):
 
     produto = buscarProduto(nomeOuIdProduto)
@@ -48,6 +47,7 @@ def entradaDeProduto(nomeOuIdProduto, quantidade, data):
             "estoqueAntes": estoqueAntes,
             "estoqueDepois": estoqueDepois,
             "data": data
+            # "responsavel": "N/A" # Nao e exigido na historia de usuario, mas poderia ser adicionado para fins de auditoria
         })
 
         print("Entrada realizada.")
@@ -113,6 +113,7 @@ def consultarMovimentacoes():
         print(f'''Tipo: {movimentacao["tipo"]}
             Produto: {movimentacao["produto"]}
             Quantidade antes: {movimentacao["estoqueAntes"]}
+            Quantidade movimentada: {movimentacao["quantidadeMovimentada"]}
             Quantidade depois: {movimentacao["estoqueDepois"]}
             Data: {movimentacao["data"]}
             Responsável: {movimentacao.get("responsavel", "N/A")}
