@@ -25,20 +25,28 @@ def buscarProduto(nomeOuIdProduto):
 
 
 # Adicionar produtos ao estoque
+# Adicionar produtos ao estoque
 def entradaDeProduto(nomeOuIdProduto, quantidade, data):
 
     produto = buscarProduto(nomeOuIdProduto)
 
     if produto:
 
-        print(f"\nVoce esta tentando adicionar {quantidade} de {produto['nomeProduto']}")
+        estoqueAntes = produto["qtdProdutoEstoque"]
+        estoqueDepois = estoqueAntes + quantidade
 
-        produto["qtdProdutoEstoque"] += quantidade
+        print(f"\nVoce esta tentando adicionar {quantidade} de {produto['nomeProduto']}")
+        print(f"Estoque antes: {estoqueAntes}")
+        print(f"Estoque depois: {estoqueDepois}")
+
+        produto["qtdProdutoEstoque"] = estoqueDepois
 
         movimentacoes.append({
             "tipo": "Entrada",
             "produto": produto["nomeProduto"],
-            "quantidade": quantidade,
+            "quantidadeMovimentada": quantidade,
+            "estoqueAntes": estoqueAntes,
+            "estoqueDepois": estoqueDepois,
             "data": data
         })
 
@@ -59,12 +67,20 @@ def saidaDeProduto(nomeOuIdProduto, quantidade, data, responsavel):
 
         if produto["qtdProdutoEstoque"] >= quantidade:
 
-            produto["qtdProdutoEstoque"] -= quantidade
+            estoqueAntes = produto["qtdProdutoEstoque"]
+            estoqueDepois = estoqueAntes - quantidade
+
+            print(f"Estoque antes: {estoqueAntes}")
+            print(f"Estoque depois: {estoqueDepois}")
+
+            produto["qtdProdutoEstoque"] = estoqueDepois
 
             movimentacoes.append({
                 "tipo": "Saída",
                 "produto": produto["nomeProduto"],
-                "quantidade": quantidade,
+                "quantidadeMovimentada": quantidade,
+                "estoqueAntes": estoqueAntes,
+                "estoqueDepois": estoqueDepois,
                 "data": data,
                 "responsavel": responsavel
             })
@@ -96,7 +112,8 @@ def consultarMovimentacoes():
 
         print(f'''Tipo: {movimentacao["tipo"]}
             Produto: {movimentacao["produto"]}
-            Quantidade: {movimentacao["quantidade"]}
+            Quantidade antes: {movimentacao["estoqueAntes"]}
+            Quantidade depois: {movimentacao["estoqueDepois"]}
             Data: {movimentacao["data"]}
             Responsável: {movimentacao.get("responsavel", "N/A")}
             ''')
